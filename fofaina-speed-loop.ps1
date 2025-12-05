@@ -28,8 +28,6 @@ $headerOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 
 for ($i = 1; $i -le 1; $i++) {
 
-    Start-Sleep -Seconds 30
-
     Write-Output "Running step #$i..."
 
     $furtherOutput = & $exePath "-f" "csv"
@@ -38,6 +36,8 @@ for ($i = 1; $i -le 1; $i++) {
 
 
     $furtherOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
+
+    Start-Sleep -Seconds 30
 }
 
 $data = Import-Csv -Path $destinationStageFile
