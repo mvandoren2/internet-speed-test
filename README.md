@@ -14,3 +14,6 @@ This script is intended to regularly conduct internet speeds via using Ookla CLI
 
 * **-h, -hrs**:
   Determine the number of hours (in terms of duration) you want to conduct the speed tests. This does accept floating point numbers so it can support 0.5 for half an hour.
+  
+* **-f, -file**:
+  This defaults to the location of the Ookla Windws Zip download location (current as of 2025-12-05)
