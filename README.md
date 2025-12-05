@@ -2,7 +2,7 @@ Leverage Ookla CLI to Periodically Check Internet Download and Upload Speeds
 ============
 
 ## SYNOPSIS
-**internet-speed-loop.ps1** [**-i=**<interval-in-minutes>][**-h=**<hours-of-duration>][**-f=**<zip-file-location-of-speedtest.exe>]
+**internet-speed-loop.ps1** [**-i=**<interval_in_minutes>][**-h=**<hours_of_duration>][**-f=**<zip_file_location_of_speedtest.exe>]
 
 ## DESCRIPTION
 This script is intended to regularly conduct internet speeds via using Ookla CLI. This is not for commercial use. It will download the zip and extract the .exe needed if it is not present in the working directory. Then it will conduct the tests and wraps up migrating the csv file so it is in MB/s for simpler readability.
