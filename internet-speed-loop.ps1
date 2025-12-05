@@ -20,6 +20,7 @@ if (-Not (Test-Path $exePath)) {
     Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
     Expand-Archive -Path $zipPath -DestinationPath $PWD -Force
     Remove-Item -Path $zipPath -Force
+    Write-Host "Download and extraction complete."
 
     
     # Or run any other command you want here
@@ -32,17 +33,19 @@ if (-Not (Test-Path $exePath)) {
 
 $headerOutput = "`"server name`",`"server id`",`"idle latency`",`"idle jitter`",`"packet loss`",`"download`",`"upload`",`"download bytes`",`"upload bytes`",`"share url`",`"download server count`",`"download latency`",`"download latency jitter`",`"download latency low`",`"download latency high`",`"upload latency`",`"upload latency jitter`",`"upload latency low`",`"upload latency high`",`"idle latency low`",`"idle latency high`",`"timestamp`""
 
+Write-Output "Starting internet speed tests every $intervalMinutes minutes for $hours hours..."
+
 $headerOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 
 while ((Get-Date) -lt $endTime) {
 
     
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $furtherOutput += ",`"$timestamp`""
 
-    Write-Output "Testing Speed  at $timestamp"
+    Write-Output "Testing Speed at $timestamp"
 
     $furtherOutput = & $exePath "-f" "csv"
+    $furtherOutput += ",`"$timestamp`""
 
 
     $furtherOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
@@ -50,6 +53,8 @@ while ((Get-Date) -lt $endTime) {
 
     Start-Sleep -Seconds ($intervalMinutes * 60)
 }
+
+Write-Output "Speed tests completed. Processing data for speeds to be readable in MB/s..."
 
 $data = Import-Csv -Path $destinationStageFile
 
@@ -60,6 +65,10 @@ foreach ($row in $data) {
     $row.upload   = [math]::Round(($row.upload   / 125000), 2)
 }
 
+Write-Output "Data processing complete. Exporting to $destinationFile..."
+
 # Export the modified data back to CSV
 $data | Export-Csv -Path $destinationFile -NoTypeInformation
 Remove-Item -Path $destinationStageFile -Force
+
+Write-Output "All done! Results saved in $destinationFile"
