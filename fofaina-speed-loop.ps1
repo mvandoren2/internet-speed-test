@@ -1,6 +1,6 @@
 $startTime = Get-Date -Format "yyyy-MM-dd_HH-mm"
-$destinationStageFile = Join-Path -Path $PWD -ChildPath "cox-speed-tests_$startTime.csv"
-$destinationFile = Join-Path -Path $PWD -ChildPath "cox-speed-tests-converted_$startTime.csv"
+$destinationStageFile = Join-Path -Path $PWD -ChildPath "speed-tests_$startTime.csv"
+$destinationFile = Join-Path -Path $PWD -ChildPath "speed-tests-converted_$startTime.csv"
 $exePath = Join-Path -Path $PWD -ChildPath "speedtest.exe"
 
 $headerOutput = & $exePath "-f" "csv" "--output-header"
