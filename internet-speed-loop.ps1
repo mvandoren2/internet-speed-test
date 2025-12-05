@@ -3,15 +3,20 @@ param(
     [int]$intervalMinutes = 15,
 
     [Alias("h","hrs")]
-    [double]$hours = 2
+    [double]$hours = 2,
+
+    [Alias("f","file")]
+    [string]$zipUrl = "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-win64.zip"
+
+
 )
 
 $startTime = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $destinationStageFile = Join-Path -Path $PWD -ChildPath "speed-tests_$startTime.csv"
 $destinationFile = Join-Path -Path $PWD -ChildPath "speed-tests-converted_$startTime.csv"
 $exePath = Join-Path -Path $PWD -ChildPath "speedtest.exe"
-$zipUrl = "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-win64.zip"   # URL of the zip file
-$zipPath = Join-Path -Path $PWD -ChildPath "ookla-speedtest-1.2.0-win64.zip"
+
+$zipPath = Join-Path -Path $PWD -ChildPath "speed-test.zip"
 $endTime = (Get-Date).AddHours($hours)
 
 if (-Not (Test-Path $exePath)) {
@@ -65,7 +70,7 @@ foreach ($row in $data) {
     $row.upload   = [math]::Round(($row.upload   / 125000), 2)
 }
 
-Write-Output "Data processing complete. Exporting to $destinationFile..."
+Write-Output "Data processing complete."
 
 # Export the modified data back to CSV
 $data | Export-Csv -Path $destinationFile -NoTypeInformation
