@@ -38,7 +38,7 @@ if (-Not (Test-Path $exePath)) {
 
 $headerOutput = "`"server name`",`"server id`",`"idle latency`",`"idle jitter`",`"packet loss`",`"download`",`"upload`",`"download bytes`",`"upload bytes`",`"share url`",`"download server count`",`"download latency`",`"download latency jitter`",`"download latency low`",`"download latency high`",`"upload latency`",`"upload latency jitter`",`"upload latency low`",`"upload latency high`",`"idle latency low`",`"idle latency high`",`"timestamp`""
 
-Write-Output "Starting internet speed tests every $intervalMinutes minutes for $hours hours..."
+Write-Output "Starting internet speed tests every $intervalMinutes minutes for $hours hours. You'll see a slight delay between as the test runs."
 
 $headerOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 
