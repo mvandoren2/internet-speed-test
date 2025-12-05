@@ -27,9 +27,6 @@ if (-Not (Test-Path $exePath)) {
     Remove-Item -Path $zipPath -Force
     Write-Host "Download and extraction complete."
 
-    
-    # Or run any other command you want here
-    # e.g., Send-MailMessage, log entry, etc.
 } else {
     Write-Output "Speedtest.exe found. Proceeding with tests..."
 }
