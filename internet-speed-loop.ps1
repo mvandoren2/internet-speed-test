@@ -62,3 +62,4 @@ foreach ($row in $data) {
 
 # Export the modified data back to CSV
 $data | Export-Csv -Path $destinationFile -NoTypeInformation
+Remove-Item -Path $destinationStageFile -Force
