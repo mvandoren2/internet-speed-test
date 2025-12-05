@@ -1,13 +1,21 @@
+param(
+    [Alias("i","interval")]
+    [int]$intervalMinutes = 15,
+
+    [Alias("h","hrs")]
+    [double]$hours = 2
+)
+
 $startTime = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $destinationStageFile = Join-Path -Path $PWD -ChildPath "speed-tests_$startTime.csv"
 $destinationFile = Join-Path -Path $PWD -ChildPath "speed-tests-converted_$startTime.csv"
 $exePath = Join-Path -Path $PWD -ChildPath "speedtest.exe"
 $zipUrl = "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-win64.zip"   # URL of the zip file
 $zipPath = Join-Path -Path $PWD -ChildPath "ookla-speedtest-1.2.0-win64.zip"
-
+$endTime = (Get-Date).AddHours($hours)
 
 if (-Not (Test-Path $exePath)) {
-    Write-Host "File not found. Taking action..."
+    Write-Host "Speedtest.exe not found. Downloading and extracting..."
     
     Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
     Expand-Archive -Path $zipPath -DestinationPath $PWD -Force
@@ -17,7 +25,7 @@ if (-Not (Test-Path $exePath)) {
     # Or run any other command you want here
     # e.g., Send-MailMessage, log entry, etc.
 } else {
-    Write-Output "File exists. No action needed."
+    Write-Output "Speedtest.exe found. Proceeding with tests..."
 }
 
 
@@ -26,18 +34,21 @@ $headerOutput = "`"server name`",`"server id`",`"idle latency`",`"idle jitter`",
 
 $headerOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 
-for ($i = 1; $i -le 1; $i++) {
+while ((Get-Date) -lt $endTime) {
 
-    Write-Output "Running step #$i..."
-
-    $furtherOutput = & $exePath "-f" "csv"
+    
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $furtherOutput += ",`"$timestamp`""
+
+    Write-Output "Testing Speed  at $timestamp"
+
+    $furtherOutput = & $exePath "-f" "csv"
 
 
     $furtherOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 
-    Start-Sleep -Seconds 30
+
+    Start-Sleep -Seconds ($intervalMinutes * 60)
 }
 
 $data = Import-Csv -Path $destinationStageFile
