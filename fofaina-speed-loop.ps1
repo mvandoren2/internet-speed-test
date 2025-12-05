@@ -5,6 +5,7 @@ $exePath = Join-Path -Path $PWD -ChildPath "speedtest.exe"
 $zipUrl = "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-win64.zip"   # URL of the zip file
 $zipPath = Join-Path -Path $PWD -ChildPath "ookla-speedtest-1.2.0-win64.zip"
 
+
 if (-Not (Test-Path $exePath)) {
     Write-Host "File not found. Taking action..."
     
@@ -21,17 +22,20 @@ if (-Not (Test-Path $exePath)) {
 
 
 
-$headerOutput = & $exePath "-f" "csv" "--output-header"
+$headerOutput = "`"server name`",`"server id`",`"idle latency`",`"idle jitter`",`"packet loss`",`"download`",`"upload`",`"download bytes`",`"upload bytes`",`"share url`",`"download server count`",`"download latency`",`"download latency jitter`",`"download latency low`",`"download latency high`",`"upload latency`",`"upload latency jitter`",`"upload latency low`",`"upload latency high`",`"idle latency low`",`"idle latency high`",`"timestamp`""
 
 $headerOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 
-for ($i = 1; $i -le 2; $i++) {
+for ($i = 1; $i -le 1; $i++) {
 
     Start-Sleep -Seconds 30
 
     Write-Output "Running step #$i..."
 
     $furtherOutput = & $exePath "-f" "csv"
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $furtherOutput += ",`"$timestamp`""
+
 
     $furtherOutput | Out-File -FilePath $destinationStageFile -Append -Encoding utf8
 }
